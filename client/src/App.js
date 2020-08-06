@@ -117,10 +117,16 @@ makePayment = (e) => {
               customerOperation:result.customerOperation,
               userId:window.localStorage.getItem('userId'),
               merchRefNum:merchRefNum
-          }).then((res)=> {if(res.status===200){
+          }).then((res)=> {
+            if(res.status===200){
               window.location.reload()
               alert('Payment Successful!')
-          }})
+            }
+            else{
+              window.location.reload()
+              alert('Payment Unsuccessful!, Please try again..')
+            }
+        })
       } else {
           console.error(error);
           // Handle the error 
@@ -147,10 +153,16 @@ registerUser = (e) => {
   axios.post('/user/register',{
       user:user
   }).then((res)=>{
+    if(res.status===201){
       var token = res.data.token
       window.localStorage.setItem('token',token)
       window.localStorage.setItem('userId',res.data.user._id)
       window.location.reload()
+      alert("User Registered Succesfully!")
+    }
+    else{
+      alert("User already exists with same email id, Please check..")
+    }
   })
 }
 handleChange = (e) => {
@@ -189,10 +201,17 @@ handleChange = (e) => {
       default:break
   }
 }
+
+logout = (e) =>{
+  e.preventDefault()
+  window.localStorage.clear()
+  window.location.reload()
+}
+
   render(){
     var render 
     if(window.localStorage.getItem('token')){
-      render =  <PaymentForm fetchUser={this.fetchUserDetails} user={this.state} changeHandle={this.handleChange} makePay={this.makePayment}/>
+      render = <div className="row"><button className="btn waves-effect waves-light" onClick={this.logout} >Logout</button><PaymentForm fetchUser={this.fetchUserDetails} user={this.state} changeHandle={this.handleChange} makePay={this.makePayment}/></div>
     }
     else{
       render = <Register user={this.state} changeHandle={this.handleChange} register={this.registerUser}/>
