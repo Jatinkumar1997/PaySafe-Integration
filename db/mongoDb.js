@@ -1,8 +1,8 @@
 const mongoose = require('mongoose')
 
-const mongoURI = process.env.MONGODB_URI || "mongodb+srv://<username>:<password>@cluster0.mwozi.mongodb.net/<DBName>?retryWrites=true&w=majority"
+const mongoURI = process.env.MONGODB_URI 
 
-mongoose.connect(mongoURI,{useNewUrlParser: true, useUnifiedTopology: true}).catch(err=>console.log(err))
+mongoose.connect(mongoURI,{useNewUrlParser: true, useCreateIndex:true, useUnifiedTopology: true}).catch(err=>console.log(err))
 
 const db = mongoose.connection
 db.once('open',()=>{

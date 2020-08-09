@@ -35,7 +35,19 @@ class UserService{
             }
         }
         catch(e){
+            console.error(e)
             return {errorWithDB:e}
+        }
+    }
+
+    async loginUser(req){
+        try {
+            const user = await User.findByCredentials(req.body.email, req.body.password)
+            const token = await user.generateAuthToken()
+            return { user, token }
+        } catch (e) {
+            console.error(e)
+            return {error:e}
         }
     }
     
@@ -44,7 +56,6 @@ class UserService{
         if(!usr){
             return {error:'User Not Found'}
         }
-        console.log('GETTING USER DETAILS for USER:',usr.firstName)
         return usr
     }
 
