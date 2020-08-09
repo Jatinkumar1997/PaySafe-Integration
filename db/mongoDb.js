@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const mongoURI = process.env.MONGODB_URI || "mongodb+srv://jatin19:jatin1903@cluster0.mwozi.mongodb.net/TestECOMM?retryWrites=true&w=majority"
+const mongoURI = process.env.MONGODB_URI || "mongodb+srv://<username>:<password>@cluster0.mwozi.mongodb.net/<DBName>?retryWrites=true&w=majority"
 
 mongoose.connect(mongoURI,{useNewUrlParser: true, useUnifiedTopology: true}).catch(err=>console.log(err))
 
