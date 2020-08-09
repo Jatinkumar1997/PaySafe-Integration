@@ -50,7 +50,10 @@ makePayment = (e) => {
   const apiKey = 'cHVibGljLTc3NTE6Qi1xYTItMC01ZjAzMWNiZS0wLTMwMmQwMjE1MDA4OTBlZjI2MjI5NjU2M2FjY2QxY2I0YWFiNzkwMzIzZDJmZDU3MGQzMDIxNDUxMGJjZGFjZGFhNGYwM2Y1OTQ3N2VlZjEzZjJhZjVhZDEzZTMwNDQ=' //btoa('B-qa2-0-5f031cbe-0-302d021500890ef262296563accd1cb4aab790323d2fd570d30214510bcdacdaa4f03f59477eef13f2af5ad13e3044')
   var merchRefNum = '_' + Math.random().toString(36).substr(2, 9)
 
-  axios.get(`/user/${window.localStorage.userId}/singleUseCustomerToken`)
+  axios.post('/user/singleUseCustomerToken',{
+    merchantRefNum:merchRefNum,
+    userId:window.localStorage.getItem('userId')
+  })
   .then(res=> {
     singleUseCustomerToken = res.data.singleUseCustomerToken
     
@@ -86,25 +89,8 @@ makePayment = (e) => {
           "dynamicDescriptor": "XYZ",
           "phone": "1234567890"
           },
-      "displayPaymentMethods":["skrill","card"],
-      "paymentMethodDetails": {
-          "paysafecard": {
-              "consumerId": "1232323"
-          },
-          "paysafecash": {
-              "consumerId": "123456"
-          },
-          "sightline": {
-              "consumerId": "123456",
-              "SSN": "123456789",
-              "last4ssn": "6789",
-              "accountId":"1009688222"
-          },
-          "vippreferred":{
-              "consumerId": "550726575",
-              "accountId":"1679688456"
-          }
-        }
+      "displayPaymentMethods":["card"],
+      "paymentMethodDetails": {}
     }
 
     window.paysafe.checkout.setup(apiKey,options ,
@@ -134,9 +120,6 @@ makePayment = (e) => {
   });
   })
   .catch(err=>console.error(err))
-
-  
-  
 }
 registerUser = (e) => {
   e.preventDefault()
@@ -153,6 +136,7 @@ registerUser = (e) => {
   axios.post('/user/register',{
       user:user
   }).then((res)=>{
+    console.log(res)
     if(res.status===201){
       var token = res.data.token
       window.localStorage.setItem('token',token)
@@ -160,10 +144,8 @@ registerUser = (e) => {
       window.location.reload()
       alert("User Registered Succesfully!")
     }
-    else{
-      alert("User already exists with same email id, Please check..")
-    }
   })
+  .catch(e=>alert("User already exists with same email id, Please check.."))
 }
 handleChange = (e) => {
   const inputNm = e.target.name
